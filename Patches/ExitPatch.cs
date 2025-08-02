@@ -2,33 +2,25 @@
 using SPT.Reflection.Patching;
 using System.Reflection;
 using EFT;
-using EFT.Interactive;
-using System.Net.Sockets;
-using UnityEngine;
+using acidphantasm_letmeout.Utils;
 
 namespace acidphantasm_letmeout.Patches
 {
-    internal class InteractWithTransit_Patch : ModulePatch
+    internal class DisableExitsInteraction_Patch : ModulePatch
     {
+        public Player myPlayer;
         protected override MethodBase GetTargetMethod()
         {
-            return AccessTools.Method(typeof(GClass1676), nameof(GClass1676.InteractWithTransit));
+            return AccessTools.Method(typeof(ExfiltrationControllerClass), nameof(ExfiltrationControllerClass.DisableExitsInteraction));
         }
 
         [PatchPrefix]
-        static bool Prefix(GClass1676 __instance, Player player, TransitInteractionPacketStruct packet)
+        static bool Prefix(ExfiltrationControllerClass __instance)
         {
             if (__instance == null) return true;
 
-            Logger.LogInfo("DisableExitsHit");
-
-            __instance.method_15(player);
-            __instance.transitPlayers.Add(player.ProfileId, player.Id);
-            __instance.profileKeys[player.ProfileId] = packet.keyId;
-            __instance.dictionary_0[packet.pointId].GroupEnter(player);
-            //ExfiltrationControllerClass.Instance.BannedPlayers.Add(player.Id);
-            ExfiltrationControllerClass.Instance.CancelExtractionForPlayer(player);
-            //ExfiltrationControllerClass.Instance.DisableExitsInteraction();
+            Logger.LogInfo("DisableExitsInteraction");
+            __instance.BannedPlayers.Remove(MainUtils.GetMainPlayer().Id);
 
             return false;
         }

@@ -3,12 +3,12 @@ using BepInEx;
 
 namespace acidphantasm_letmeout
 {
-    [BepInPlugin("com.acidphantasm.letmeout", "acidphantasm-LetMeOut", "1.0.0")]
+    [BepInPlugin("com.acidphantasm.letmeout", "acidphantasm-LetMeOut", "1.0.1")]
     public class Plugin : BaseUnityPlugin
     {
         private void Awake()
         {
-            new InteractWithTransit_Patch().Enable();
+            new DisableExitsInteraction_Patch().Enable();
         }
     }
 }
